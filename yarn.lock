@@ -5976,6 +5976,7 @@ __metadata:
     sass: "npm:^1.77.4"
     vue: "npm:^3.4.27"
     vue-router: "npm:^4.3.2"
+    vue-toastification: "npm:^1.7.14"
     yarn: "npm:^1.22.22"
   languageName: unknown
   linkType: soft
@@ -8581,6 +8582,15 @@ __metadata:
   peerDependencies:
     vue: ^3.2.0
   checksum: 10c0/63d5be4a983622e130c1ebe6e26dd17dee2346d77b35ef3f09ee0d8693fd38ad2387551c2db87a5cb258348dbc24dd815f48b4a55cc3ccb680c81aa4837ca88e
+  languageName: node
+  linkType: hard
+
+"vue-toastification@npm:^1.7.14":
+  version: 1.7.14
+  resolution: "vue-toastification@npm:1.7.14"
+  peerDependencies:
+    vue: ^2.0.0
+  checksum: 10c0/6610ed0bd19aecf03e1a3d7dc84ca118807e766a098bd4f8f81c91fd364ec690907722f915de7998d8b03e6a41c66a80af9bf164ed00f893c2b5a1bcd0ce16b1
   languageName: node
   linkType: hard
 

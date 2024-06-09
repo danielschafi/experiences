@@ -7,4 +7,4 @@ export const useAuthStore = defineStore({
     profile: null,
     session: null,
    }),
-  })
+})

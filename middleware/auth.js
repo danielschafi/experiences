@@ -1,29 +1,32 @@
 import { useAuthStore } from "~/stores/auth"
 
 export default defineNuxtRouteMiddleware((to, from) => {
-   const authClient = useSupabaseAuthClient()
-   const supabase = useSupabaseClient()
-   const user = useSupabaseUser()
-   const authStore = useAuthStore()
+    const nuxtApp = useNuxtApp()
+    const pinia = nuxtApp.$config.pinia
+    
+    const supabase = useSupabaseClient()
+    const user = useSupabaseUser()
+    const authStore = useAuthStore(pinia)
 
-
-   console.log(user);
-   // Connect to supabase
-   try {
-    const {data: session, error } = authClient.auth.getSession()
+    console.log("AuthStore", authStore);
+    console.log("USER", user);
+    
+    // Connect to supabase
+    try {
+    const {data: session, error } = supabase.auth.getSession()
     if (error){
         console.log(error)
     }else {
         console.log(session)
     }
     } catch (error) {
-    console.error(error)
-   }
+        console.error(error)
+    }
 
 
-   // Try to find the user in the database
-   try {
-    const {data:profile, error} = authClient.from("profiles")
+    // Try to find the user in the database
+    try {
+    const {data:profile, error} = supabase.from("profiles")
         .select("*")
         .eq("id", user.value.id).single()
 
@@ -32,15 +35,18 @@ export default defineNuxtRouteMiddleware((to, from) => {
         }
         authStore.profile = profile
 
-   } catch (error) {
+    } catch (error) {
+        console.log(error);
+    }
 
-   }
-
-   if (!user.value) {
+    if (!user.value) {
     return navigateTo("/login")
-   }
+    }
 
-   // save user value to the store
-   authStore.user = user.value
+    // save user value to the store
+    authStore.user = user.value
+
+
+    console.log("StoreCompleted", authStore)
 
 })
