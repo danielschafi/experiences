@@ -5,5 +5,13 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
   plugins: [
     '~/plugins/beforeStartup.ts'
-  ]
+  ],  
+  supabase: {
+    redirectOptions: {
+      login: '/login',
+      callback: '/',
+      include: ["/profile"]
+      // exclude: ['/', '/register'],
+    }
+  }
 })

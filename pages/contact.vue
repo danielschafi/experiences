@@ -1,11 +1,10 @@
 <template>
   <div>
-    <ExperienceCardsView></ExperienceCardsView>
+    Contact me
   </div>
 </template>
 
 <script lang="ts" setup>
-
 
 </script>
 
