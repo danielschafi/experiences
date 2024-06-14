@@ -14,7 +14,8 @@ export default {
       torch: "#B85D42", //Buttons etc. interaction elements
       pottery: "#D4B8A0", // second
       peacoat:"#A77851", // third
-      apricot: "#D78B30" // dont know yet
+      apricot: "#D78B30", // dont know yet
+      lightgray:"#F5F5F4"
     },
   },
   plugins: [],

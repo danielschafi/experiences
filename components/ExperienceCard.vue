@@ -1,26 +1,26 @@
 <template>
-  <div @click="goToExperiencePage" class="w-1/4 rounded overflow-hidden p-2 border-emerald border-solid hover:scale-105 transition-all duration-400">
-    <img class="w-full" src='https://picsum.photos/2000/2000' alt="Sunset in the mountains">
-    <div class="px-6 py-4">
-      <div class="font-bold text-xl mb-2">The Coldest Sunset</div>
-      <p class="text-gray-700 text-base">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
-      </p>
+  <article @click="goToExperiencePage" class="flex flex-col w-full p-2 overflow-hidden transition-all border-2 border-solid rounded border-eucalyptus hover:shadow-md hover:scale-105 duration-400">
+    <img class="block m-auto rounded shadow md:max-h-72 sm:max-h-screen " :src='image' :alt="description">
+    <div class="flex-grow p-2">
+      <div class="mb-1 text-xl font-bold"> {{ title }} </div>
+      <div class="line-clamp-5 text-pretty">
+        {{description}} ...
+      </div>
     </div>
-    <div class="px-6 pt-4 pb-2">
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+    <div class="p-2">
+      <hr class="mb-4">
+      <span class="inline-block text-sm font-semibold rounded-full">{{ date }}</span>
     </div>
-  </div>
+  </article>
 
 </template>
 
-<script lang="ts" setup>
+<script lang="js" setup>
 const props = defineProps({
   image: String,
   title: String,
   description: String,
+  date: String
 });
 
 function goToExperiencePage() {

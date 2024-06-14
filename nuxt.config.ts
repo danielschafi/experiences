@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/',
-      include: ["/profile"]
+      include: ["/profile", "/addExperience"]
       // exclude: ['/', '/register'],
     }
   }

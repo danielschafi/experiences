@@ -1,25 +1,13 @@
 <template>
-  <div class="flex justify-between m-4 flex-wrap ">
-    <ExperienceCard />
-        <ExperienceCard />
-    
-            <ExperienceCard />
-        
-
-                <ExperienceCard />
-                <ExperienceCard />
-            
-                    <ExperienceCard />
-                
-                        <ExperienceCard />
-                    
-                            <ExperienceCard />
-                        
+  <div class="grid grid-cols-1 gap-4 m-4 max sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> 
+    <template v-for="experience in experiences" :key="experience.id">
+      <ExperienceCard :title="experience.title" :description="experience.description" :date="experience.date" :image="experience.image"/>
+    </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+// flex flex-wrap justify-between h-full m-2 
 import { ref, onMounted } from 'vue'
 
 const experiences = ref([])
@@ -33,7 +21,6 @@ onMounted(async () => {
   if (error) {
     console.error('Error fetching experiences:', error)
   } else {
-    console.log(data)
     experiences.value = data
   }
 })
