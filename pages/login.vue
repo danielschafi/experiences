@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-almostWhite">
+  <div class="flex items-center justify-center min-h-screen bg-lightgray">
     <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
       <h1 class="mb-6 text-2xl font-bold text-emerald">Login</h1>
       <form @submit.prevent="signIn" class="space-y-4">
@@ -54,7 +54,8 @@ export default {
     return {
       email: "",
       password: "",
-      error: ""
+      error: "",
+      showPassword: false
     }
   },
   methods: {

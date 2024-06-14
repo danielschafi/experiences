@@ -72,45 +72,51 @@ export default {
       this.error = "";
     
       const supabase = useSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
       
-      try {
-        // Upload image to Supabase storage
+      if (!user){
+        console.log("Cant insert, user is none");
+      }
+      else {
+        try {
+          // Upload image to Supabase storage
 
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('experienceImages')
-          .upload(`public/${Date.now()}_${this.image.name}`, this.image, {upsert: true})
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('experienceImages')
+            .upload(`public/${Date.now()}_${this.image.name}`, this.image, {upsert: true})
 
-        if (uploadError) {
-          throw uploadError
+          if (uploadError) {
+            throw uploadError
+          }
+
+          this.imageUrl = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl;
+
+          // Prepare data for insertion
+          const dataToInsert = this.filterData({ 
+            description: this.description, 
+            title: this.title,
+            max_participants: this.maxParticipants,
+            min_participants: this.minParticipants,
+            date: this.date,
+            image: this.imageUrl
+          })
+
+          // Insert data into the database
+          const { data, error } = await supabase.from('experiences')
+            .insert([dataToInsert])
+            .select()
+
+          if (error) {
+            throw error
+          }
+          
+          this.message = "Experience created successfully"
+        navigateTo("/")
+          
+        } catch (error) {
+          this.error = error.message
+          console.error('Error creating experience:', error)
         }
-
-        this.imageUrl = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl;
-
-        // Prepare data for insertion
-        const dataToInsert = this.filterData({ 
-          description: this.description, 
-          title: this.title,
-          max_participants: this.maxParticipants,
-          min_participants: this.minParticipants,
-          date: this.date,
-          image: this.imageUrl
-        })
-
-        // Insert data into the database
-        const { data, error } = await supabase.from('experiences')
-          .insert([dataToInsert])
-          .select()
-
-        if (error) {
-          throw error
-        }
-        
-        this.message = "Experience created successfully"
-       navigateTo("/")
-        
-      } catch (error) {
-        this.error = error.message
-        console.error('Error creating experience:', error)
       }
     },
     onPickFile() {

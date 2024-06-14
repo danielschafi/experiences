@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> 
     <template v-for="experience in experiences" :key="experience.id">
-      <ExperienceCard :title="experience.title" :description="experience.description" :date="experience.date" :image="experience.image"/>
+      <ExperienceCard :experienceId="experience.id" :title="experience.title" :description="experience.description" :date="experience.date" :image="experience.image" />
     </template>
   </div>
 </template>
@@ -21,6 +21,8 @@ onMounted(async () => {
     console.error('Error fetching experiences:', error)
   } else {
     experiences.value = data
+    console.log("XP:", experiences);
+    
   }
 })
 </script>
