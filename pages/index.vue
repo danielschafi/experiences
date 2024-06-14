@@ -1,13 +1,13 @@
 <template>
-  <div>
-
-      <Button @click="goToExperiencePage" class="p-2 m-2 text-white rounded bg-emerald">Create your own Experience</Button>
+  <div class="mx-4 mb-8 md:mx-8">
+    <button @click="goToAddExperiencePage" class="w-full p-2 my-6 text-white rounded max-w-72 bg-emerald">Create Experience</Button>
     <ExperienceCardsView />
   </div>
 </template>
 
+
 <script lang="ts" setup>
-function goToExperiencePage() {
+function goToAddExperiencePage() {
   navigateTo("/addExperience")
 }
 
