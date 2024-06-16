@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 gap-4 p-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> 
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> 
     <template v-for="experience in experiences" :key="experience.id">
       <ExperienceCard :experienceId="experience.id" :title="experience.title" :description="experience.description" :date="experience.date" :image="experience.image" :options=true />
     </template>

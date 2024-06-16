@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-lightgray">
+  <div class="flex items-center justify-center min-h-screen ">
     <div class="w-full max-w-4xl min-h-screen p-8 bg-white shadow-md">
       <h1 class="mb-6 text-2xl font-bold text-emerald">Edit Experience</h1>
       
@@ -49,21 +49,21 @@ export default {
     const supabase = useSupabaseClient()
 
     const id = route.params.id
-    const title = ref('')
-    const description = ref('')
-    const minParticipants = ref('')
-    const maxParticipants = ref('')
-    const date = ref('')
+    const title = ref("")
+    const description = ref("")
+    const minParticipants = ref("")
+    const maxParticipants = ref("")
+    const date = ref("")
     const image = ref(null)
-    const imageUrl = ref('')
-    const error = ref('')
-    const message = ref('')
+    const imageUrl = ref("")
+    const error = ref("")
+    const message = ref("")
 
     const fetchExperience = async () => {
       const { data, error } = await supabase
-        .from('experiences')
-        .select('*')
-        .eq('id', id)
+        .from("experiences")
+        .select("*")
+        .eq("id", id)
         .single()
       
       if (error) {
@@ -81,22 +81,27 @@ export default {
 
     const updateExperience = async () => {
       try {
-        let updatedImageUrl = imageUrl.value
+        let updatedImageUrl = (image.value != null) ? image.value : imageUrl.value
+        console.log("IMAGE", updatedImageUrl);
+
 
         if (image.value) {
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('experienceImages')
+            .from("experienceImages")
             .upload(`public/${Date.now()}_${image.value.name}`, image.value, { upsert: true })
           
           if (uploadError) {
             throw uploadError
           }
 
-          updatedImageUrl = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl
+          updatedImageUrl = supabase.storage.from("experienceImages").getPublicUrl(uploadData.path).data.publicUrl
         }
 
+
+        console.log("NEW IMAGE URL", updatedImageUrl)
+        console.log("ID: ", id)
         const { error: updateError } = await supabase
-          .from('experiences')
+          .from("experiences")
           .update({
             title: title.value,
             description: description.value,
@@ -105,17 +110,19 @@ export default {
             date: date.value,
             image: updatedImageUrl,
           })
-          .eq('id', id)
+          .eq("id", id)
+
+          console.log("ERROR? ", updateError)
 
         if (updateError) {
           throw updateError
         }
 
         message.value = "Experience updated successfully"
-        router.push('/')
+        router.push("/")
       } catch (error) {
         error.value = error.message
-        console.error('Error updating experience:', error)
+        console.error("Error updating experience:", error)
       }
     }
 
@@ -126,7 +133,10 @@ export default {
       }
     }
 
-    onMounted(fetchExperience)
+    onMounted(() => {
+      fetchExperience()
+    })
+
 
     return {
       title,

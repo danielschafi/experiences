@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-lightgray">
-    <div class="w-full max-w-4xl min-h-screen p-8 bg-white shadow-md">
+  <div class="flex items-center justify-center min-h-full ">
+    <div class="w-full max-w-4xl p-8 bg-white shadow-md min-full">
       <h1 class="mb-6 text-2xl font-bold text-emerald">Create Experience</h1>
       
       <form @submit.prevent="createExperience"  class="min-h-screen space-y-4" ref="createExperienceForm">

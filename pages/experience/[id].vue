@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col items-center min-h-screen py-10 bg-lightgray">
+  <div class="flex flex-col items-center w-full min-h-screen bg-lightgray">
     <div class="w-full max-w-4xl p-8 bg-white shadow-md">
       <h1 class="mb-4 text-3xl font-bold text-emerald">{{ event.title }}</h1>
-      <img v-if="event.image" :src="event.image" alt="Event Image" class="w-full mb-4 rounded-md" />
+      <img v-if="event.image" :src="event.image" alt="Event Image" class="mx-auto mb-4 rounded-md max-h-96 " />
       <p class="mb-4 text-lg text-gray-700 whitespace-pre-line">{{ event.description }}</p>
       <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">
         <div>

@@ -1,9 +1,18 @@
 <template>
-  <footer class="bg-eucalyptus text-white py-6 w-full relative mt-4 left-0 bottom-0">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <p class="text-sm">&copy; 2024 My Website. All rights reserved.</p>
+  <footer class="relative bottom-0 left-0 w-full py-6 text-white bg-eucalyptus">
+    <div class="container px-4 ml-4 mr-auto">
+      <div class="flex flex-row items-center justify-between">
+        <div >
+          <ul>
+            <li class="my-2">
+            <NuxtLink class="text-sm text-center hover:text-pottery"  to="/contact">Contact</NuxtLink>
+            </li>
+            <li class="my-2">
+            <NuxtLink class="text-sm text-center hover:text-pottery"  to="/about">About</NuxtLink>
+            </li>
+            <li class="my-2"><p class="text-sm">&copy; 2024 XPTogether. All rights reserved.</p></li>
+            
+          </ul>
         </div>
       </div>
     </div>
