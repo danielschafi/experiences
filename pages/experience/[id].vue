@@ -22,69 +22,48 @@
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    const route = useRoute()
-    const supabase = useSupabaseClient()
+<script setup lang="ts">
+const route = useRoute()
+const supabase = useSupabaseClient()
 
-    const event = ref({
-      title: '',
-      description: '',
-      minParticipants: '',
-      maxParticipants: '',
-      date: '',
-      image: ''
-    })
-    const id = route.params.id
+const event = ref({
+  title: '',
+  description: '',
+  minParticipants: '',
+  maxParticipants: '',
+  date: '',
+  image: ''
+})
 
-    const fetchEvent = async () => {
-      const { data, error } = await supabase
-        .from('experiences')
-        .select('*')
-        .eq('id', id)
-        .single()
-      
-      if (error) {
-        console.error(error)
-        return
-      }
-      
-      event.value = {
-        title: data.title,
-        description: data.description,
-        minParticipants: data.min_participants,
-        maxParticipants: data.max_participants,
-        date: data.date,
-        image: data.image
-      }
-    }
+const id = route.params.id
 
-    const formatDate = (dateString) => {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString(undefined, options)
-    }
-
-    onMounted(fetchEvent)
-
-    return {
-      event,
-      formatDate
-    }
+const fetchEvent = async () => {
+  const { data, error } = await supabase
+    .from('experiences')
+    .select('*')
+    .eq('id', id)
+    .single()
+  
+  if (error) {
+    console.error(error)
+    return
+  }
+  
+  event.value = {
+    title: data.title,
+    description: data.description,
+    minParticipants: data.min_participants,
+    maxParticipants: data.max_participants,
+    date: data.date,
+    image: data.image
   }
 }
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  return new Date(dateString).toLocaleDateString(undefined, options)
+}
+
+onMounted(fetchEvent)
 </script>
 
-<style scoped>
-.bg-lightgray {
-  background-color: #f7fafc;
-}
-
-.text-eucalyptus {
-  color: #34D399; /* Tailwind green-400 color */
-}
-
-.text-emerald {
-  color: #10B981; /* Tailwind emerald-500 color */
-}
-</style>

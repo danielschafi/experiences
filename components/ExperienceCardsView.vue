@@ -1,30 +1,36 @@
 <template>
   <div class="grid grid-cols-1 gap-4 py-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> 
-    <template v-for="experience in experiences" :key="experience.id">
-      <ExperienceCard :experienceId="experience.id" :title="experience.title" :description="experience.description" :date="experience.date" :image="experience.image" />
-    </template>
+    <ExperienceCard v-for="experience in experiences" :key="experience.id"
+                    :experienceId="experience.id"
+                    :title="experience.title"
+                    :description="experience.description"
+                    :date="experience.date"
+                    :image="experience.image" />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
 
-const experiences = ref([])
-const supabase = useSupabaseClient()
+const experiences = ref([]);
+const supabase = useSupabaseClient();
 
 onMounted(async () => {
-  const { data, error } = await supabase
-    .from('experiences')
-    .select('*')
+  try {
+    const { data, error } = await supabase
+      .from('experiences')
+      .select('*');
 
-  if (error) {
-    console.error('Error fetching experiences:', error)
-  } else {
-    experiences.value = data    
+    if (error) {
+      throw new Error(`Error fetching experiences: ${error.message}`);
+    } else {
+      experiences.value = data;
+    }
+  } catch (error) {
+    console.error(error);
   }
-})
+});
 </script>
 
-<style>
-
+<style scoped>
+/* Add your scoped styles here */
 </style>

@@ -7,7 +7,7 @@
 
 
 <script lang="ts" setup>
-function goToAddExperiencePage() {
+const goToAddExperiencePage = () => {
   navigateTo("/addExperience")
 }
 

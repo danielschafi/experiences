@@ -25,7 +25,7 @@
             />
             <button 
               type="button" 
-              @click="showPassword = !showPassword" 
+              @click="toggleShowPassword" 
               class="absolute right-2 top-2 text-torch hover:text-apricot"
             >
               {{ showPassword ? 'hide' : 'show' }} Password
@@ -48,29 +48,28 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      error: "",
-      showPassword: false
-    }
-  },
-  methods: {
-    async signIn() {
-      const supabase = useSupabaseClient();     
-      const { error } = await supabase.auth.signInWithPassword({
-        email: this.email,
-        password: this.password
-      })
-      if (error) {
-        this.error = error.message
-      } else {
-        this.$router.push("/")
-      }
-    }
+<script setup lang="ts">
+const email = ref("")
+const password = ref("")
+const error = ref("")
+const showPassword = ref(false)
+const router = useRouter()
+const supabase = useSupabaseClient()
+
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value
+}
+
+const signIn = async () => {
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value
+  })
+
+  if (signInError) {
+    error.value = signInError.message
+  } else {
+    router.push("/")
   }
 }
 </script>

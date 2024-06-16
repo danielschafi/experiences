@@ -3,30 +3,28 @@
     <div class="w-full max-w-4xl p-8 bg-white shadow-md min-full">
       <h1 class="mb-6 text-2xl font-bold text-emerald">Create Experience</h1>
       
-      <form @submit.prevent="createExperience"  class="min-h-screen space-y-4" ref="createExperienceForm">
-        
+      <form @submit.prevent="createExperience" class="min-h-screen space-y-4" ref="createExperienceForm">
         <label for="title" class="block mb-2 text-eucalyptus">Title</label>
         <input type="text" v-model="title" id="title" 
         class="w-full p-2 border rounded border-eucalyptus">
 
-        
         <label for="description" class="block mb-2 text-eucalyptus">Description</label>
         <textarea type="text" v-model="description" id="description" rows="6" cols="50"
         class="w-full p-2 border rounded border-eucalyptus"></textarea>
 
         <div id="participants" class="container mx-auto">
           <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div class="">
+            <div>
               <label for="minParticipants" class="block mb-2 text-eucalyptus">Min Participants</label>
               <input type="number" v-model="minParticipants" id="minParticipants"
               class="w-full py-2 text-center border rounded border-eucalyptus">
             </div>
-            <div class="">
+            <div>
               <label for="maxParticipants" class="block mb-2 text-eucalyptus">Max Participants</label>
               <input type="number" v-model="maxParticipants" id="maxParticipants"
               class="w-full py-2 text-center border rounded border-eucalyptus">
             </div>
-            <div class="">
+            <div>
               <label for="date" class="block mb-2 text-eucalyptus">Date</label>
               <input type="date" v-model="date" id="date" 
               class="w-full py-2 text-center border rounded border-eucalyptus">
@@ -42,98 +40,86 @@
       </form>
       <p v-if="error">{{ error }}</p>
       <p v-if="message">{{ message }}</p>
-      
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive } from 'vue'
 
+const title = ref("")
+const description = ref("")
+const error = ref("")
+const message = ref("")
+const maxParticipants = ref("")
+const minParticipants = ref("")
+const date = ref("")
+const image = ref(null)
+const imageUrl = ref("")
+const fileInput = ref(null)
 
-export default {
-  data() {
-    return {
-      title: "", 
-      description: "", 
-      category: "", 
-      error: "",
-      message:"",
-      maxParticipants: "",
-      minParticipants: "",
-      date: "",
-      image: null,
-      imageUrl: "",
-      time: ""
-    }
-  },
-  methods: {
-    async createExperience() {
-      this.message = "";
-      this.error = "";
-    
-      const supabase = useSupabaseClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user){
-        console.log("Cant insert, user is none");
-      }
-      else {
-        try {
-          // Upload image to Supabase storage
+const router = useRouter()
+const supabase = useSupabaseClient()
 
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('experienceImages')
-            .upload(`public/${Date.now()}_${this.image.name}`, this.image, {upsert: true})
+const createExperience = async () => {
+  message.value = ""
+  error.value = ""
 
-          if (uploadError) {
-            throw uploadError
-          }
-
-          this.imageUrl = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl;
-
-          // Prepare data for insertion
-          const dataToInsert = this.filterData({ 
-            description: this.description, 
-            title: this.title,
-            max_participants: this.maxParticipants,
-            min_participants: this.minParticipants,
-            date: this.date,
-            image: this.imageUrl
-          })
-
-          // Insert data into the database
-          const { data, error } = await supabase.from('experiences')
-            .insert([dataToInsert])
-            .select()
-
-          if (error) {
-            throw error
-          }
-          
-          this.message = "Experience created successfully"
-        navigateTo("/")
-          
-        } catch (error) {
-          this.error = error.message
-          console.error('Error creating experience:', error)
-        }
-      }
-    },
-    onPickFile() {
-      this.$refs.fileInput.click()
-    },
-    onFilePicked(event) {
-      const files = event.target.files
-      if (files.length > 0) {
-        this.image = files[0]
-      }
-    },
-    filterData(data) {
-      return Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => value !== null && value !== '')
-      )
-    }
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    console.log("Can't insert, user is none")
+    return
   }
+  
+  try {
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('experienceImages')
+      .upload(`public/${Date.now()}_${image.value.name}`, image.value, { upsert: true })
+
+    if (uploadError) {
+      throw uploadError
+    }
+
+    imageUrl.value = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl
+
+    const dataToInsert = filterData({ 
+      description: description.value, 
+      title: title.value,
+      max_participants: maxParticipants.value,
+      min_participants: minParticipants.value,
+      date: date.value,
+      image: imageUrl.value
+    })
+
+    const { data, error: insertError } = await supabase.from('experiences')
+      .insert([dataToInsert])
+      .select()
+
+    if (insertError) {
+      throw insertError
+    }
+
+    message.value = "Experience created successfully"
+    router.push("/")
+    
+  } catch (error) {
+    error.value = error.message
+    console.error('Error creating experience:', error)
+  }
+}
+
+const onFilePicked = (event) => {
+  const files = event.target.files
+  if (files.length > 0) {
+    image.value = files[0]
+  }
+}
+
+const filterData = (data) => {
+  return Object.fromEntries(
+    Object.entries(data).filter(([_, value]) => value !== null && value !== '')
+  )
 }
 </script>
 
