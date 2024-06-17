@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -80,7 +80,7 @@ const fetchExperience = async () => {
 
 const updateExperience = async () => {
   try {
-    let updatedImageUrl = (image.value != null) ? image.value : imageUrl.value
+    var updatedImageUrl = (image.value != null) ? image.value : imageUrl.value
     console.log("IMAGE", updatedImageUrl);
 
     if (image.value) {
@@ -105,11 +105,10 @@ const updateExperience = async () => {
         min_participants: minParticipants.value,
         max_participants: maxParticipants.value,
         date: date.value,
-        image: updatedImageUrl,
-      })
-      .eq("id", id)
+        image: updatedImageUrl
+      }).eq("id", id)
 
-    console.log("ERROR? ", updateError)
+    console.log("ERROR ", updateError)
 
     if (updateError) {
       throw updateError

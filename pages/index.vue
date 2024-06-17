@@ -12,7 +12,3 @@ const goToAddExperiencePage = () => {
 }
 
 </script>
-
-<style>
-
-</style>

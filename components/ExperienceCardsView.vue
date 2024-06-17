@@ -5,7 +5,7 @@
                     :title="experience.title"
                     :description="experience.description"
                     :date="experience.date"
-                    :image="experience.image" />
+                    :image="experience.image"/>
   </div>
 </template>
 
@@ -17,8 +17,8 @@ const supabase = useSupabaseClient();
 onMounted(async () => {
   try {
     const { data, error } = await supabase
-      .from('experiences')
-      .select('*');
+      .from("experiences")
+      .select("*");
 
     if (error) {
       throw new Error(`Error fetching experiences: ${error.message}`);
@@ -31,6 +31,3 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-/* Add your scoped styles here */
-</style>

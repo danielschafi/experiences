@@ -1,5 +1,5 @@
 <template>
-  <article @click="goToExperiencePage" class="flex flex-col w-full p-2 overflow-hidden transition-all bg-white border-2 border-solid rounded border-eucalyptus hover:shadow-md hover:scale-105 duration-400">
+  <article @click="goToExperiencePage" class="flex flex-col w-full p-2 overflow-hidden transition-all bg-white border-2 border-solid rounded hover:border-emerald border-eucalyptus hover:shadow-md hover:scale-105 duration-400">
     <img class="block m-auto rounded shadow md:max-h-72 sm:max-h-screen" :src="image" :alt="description">
     <div class="flex-grow p-2">
       <div class="mb-1 text-xl font-bold">{{ title }}</div>
@@ -7,7 +7,10 @@
     </div>
     <div class="p-2">
       <hr class="mb-4">
-      <span class="inline-block text-sm font-semibold rounded-full">{{ date }}</span>
+      <div class="flex flex-row justify-between">
+        <span class="inline-block text-sm font-semibold">{{ date }}</span>
+        <span v-if="username" class="inline-block text-sm font-semibold">by {{ username }}</span>
+      </div>
       
       <div v-if="options" class="grid grid-cols-2 mt-4 space-x-4">
         <button @click.stop="deleteExperience" class="flex items-center justify-center px-4 py-2 text-white rounded bg-torch">
@@ -33,24 +36,27 @@ const props = defineProps({
   description: String,
   date: String,
   options: Boolean,
-  experienceId: String
+  experienceId: String,
 });
 
 const router = useRouter();
 const supabase = useSupabaseClient();
+const username = ref("")
 
 const deleteExperience = async () => {
   console.log("DELETED_ID:", props.experienceId);
   
   const { error } = await supabase
-    .from('experiences')
+    .from("experiences")
     .delete()
-    .eq('id', props.experienceId);
+    .eq("id", props.experienceId);
   
   if (error) {
-    console.error('Error deleting experience:', error);
+    console.error("Error deleting experience:", error);
+    alert("Failed to delete Experience")
   } else {
-    console.log('Experience deleted successfully');
+    console.log("Experience deleted successfully");
+    alert("Experience deleted successfully")
   }
 };
 
@@ -59,11 +65,7 @@ const goToEditPage = () => {
 };
 
 const goToExperiencePage = () => {
-  console.log(`/experience/${props.experienceId}`)
   router.push(`/experience/${props.experienceId}`);
 };
-</script>
 
-<style scoped>
-/* Add your scoped styles here */
-</style>
+</script>

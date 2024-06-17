@@ -27,21 +27,21 @@ const route = useRoute()
 const supabase = useSupabaseClient()
 
 const event = ref({
-  title: '',
-  description: '',
-  minParticipants: '',
-  maxParticipants: '',
-  date: '',
-  image: ''
+  title: "",
+  description: "",
+  minParticipants: "",
+  maxParticipants: "",
+  date: "",
+  image: ""
 })
 
 const id = route.params.id
 
 const fetchEvent = async () => {
   const { data, error } = await supabase
-    .from('experiences')
-    .select('*')
-    .eq('id', id)
+    .from("experiences")
+    .select("*")
+    .eq("id", id)
     .single()
   
   if (error) {
@@ -60,7 +60,7 @@ const fetchEvent = async () => {
 }
 
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  const options = { year: "numeric", month: "long", day: "numeric" }
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 

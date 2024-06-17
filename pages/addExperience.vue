@@ -1,15 +1,15 @@
 <template>
   <div class="flex items-center justify-center min-h-full ">
-    <div class="w-full max-w-4xl p-8 bg-white shadow-md min-full">
+    <div class="w-full max-w-4xl p-8 bg-white shadow-md ">
       <h1 class="mb-6 text-2xl font-bold text-emerald">Create Experience</h1>
       
       <form @submit.prevent="createExperience" class="min-h-screen space-y-4" ref="createExperienceForm">
         <label for="title" class="block mb-2 text-eucalyptus">Title</label>
-        <input type="text" v-model="title" id="title" 
+        <input type="text" required v-model="title" id="title" 
         class="w-full p-2 border rounded border-eucalyptus">
 
         <label for="description" class="block mb-2 text-eucalyptus">Description</label>
-        <textarea type="text" v-model="description" id="description" rows="6" cols="50"
+        <textarea type="text" v-model="description" required id="description" rows="6" cols="50"
         class="w-full p-2 border rounded border-eucalyptus"></textarea>
 
         <div id="participants" class="container mx-auto">
@@ -26,7 +26,7 @@
             </div>
             <div>
               <label for="date" class="block mb-2 text-eucalyptus">Date</label>
-              <input type="date" v-model="date" id="date" 
+              <input type="date" v-model="date" required id="date" 
               class="w-full py-2 text-center border rounded border-eucalyptus">
             </div>          
           </div>
@@ -45,8 +45,6 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-
 const title = ref("")
 const description = ref("")
 const error = ref("")
@@ -73,16 +71,18 @@ const createExperience = async () => {
   }
   
   try {
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('experienceImages')
-      .upload(`public/${Date.now()}_${image.value.name}`, image.value, { upsert: true })
+    if (image.value){
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("experienceImages")
+        .upload(`public/${Date.now()}_${image.value.name}`, image.value, { upsert: true })
 
-    if (uploadError) {
-      throw uploadError
+      if (uploadError) {
+        throw uploadError
+      }
+
+      imageUrl.value = supabase.storage.from("experienceImages").getPublicUrl(uploadData.path).data.publicUrl
     }
-
-    imageUrl.value = supabase.storage.from('experienceImages').getPublicUrl(uploadData.path).data.publicUrl
-
+    
     const dataToInsert = filterData({ 
       description: description.value, 
       title: title.value,
@@ -92,7 +92,7 @@ const createExperience = async () => {
       image: imageUrl.value
     })
 
-    const { data, error: insertError } = await supabase.from('experiences')
+    const { data, error: insertError } = await supabase.from("experiences")
       .insert([dataToInsert])
       .select()
 
@@ -101,11 +101,12 @@ const createExperience = async () => {
     }
 
     message.value = "Experience created successfully"
+    alert(message.value)
     router.push("/")
     
   } catch (error) {
     error.value = error.message
-    console.error('Error creating experience:', error)
+    console.error("Error creating experience:", error)
   }
 }
 
@@ -118,11 +119,8 @@ const onFilePicked = (event) => {
 
 const filterData = (data) => {
   return Object.fromEntries(
-    Object.entries(data).filter(([_, value]) => value !== null && value !== '')
+    Object.entries(data).filter(([_, value]) => value !== null && value !== "")
   )
 }
 </script>
 
-<style>
-/* Add your styles here */
-</style>
