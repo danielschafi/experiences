@@ -36,7 +36,7 @@
         <input type="file" ref="fileInput" accept="image/*" @change="onFilePicked" id="image" 
         class="w-full p-2 border rounded border-eucalyptus">
 
-        <button type="submit" class="w-full p-2 text-white rounded bg-torch">Create</button>
+        <button type="submit" class="w-full p-2 text-white rounded bg-torch hover:bg-apricot transition-colors duration-200 ease-in-out">Create</button>
       </form>
       <p v-if="error">{{ error }}</p>
       <p v-if="message">{{ message }}</p>

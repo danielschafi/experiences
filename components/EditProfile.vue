@@ -6,6 +6,7 @@
         <div>
           <label for="username" class="block mb-2 text-eucalyptus">Username:</label>
           <input
+            title="Name that other users will see"
             type="text"
             v-model="username"
             id="username"
@@ -16,6 +17,7 @@
         <div>
           <label for="publicPhoneNr" class="block mb-2 text-eucalyptus">Public phone number:</label>
           <input
+            title="Phone number, visible to other users"
             type="tel"
             v-model="publicPhoneNr"
             id="publicPhoneNr"
@@ -26,6 +28,7 @@
         <div>
           <label for="publicEmail" class="block mb-2 text-eucalyptus">Public email:</label>
           <input
+            title="Email, visible to other users"
             type="email"
             v-model="publicEmail"
             id="publicEmail"
@@ -36,6 +39,7 @@
         <div>
           <label for="email" class="block mb-2 text-eucalyptus">Email:</label>
           <input
+            title="Used to login. Not visible to other users"
             type="email"
             tabindex="-1"
             v-model="email"
@@ -48,12 +52,16 @@
         <p v-if="success" class="mt-4 text-eucalyptus">{{ success }}</p>
         <button
           type="submit"
-          class="w-full p-2 text-white rounded bg-torch hover:bg-apricot"
+          class="w-full p-2 text-white rounded bg-torch hover:bg-apricot transition-colors duration-200 ease-in-out"
         >
           Update Profile
         </button>
       </form>
+      <button @click.prevent="signOut"  class="w-full p-2 text-white my-2 rounded bg-torch hover:bg-apricot transition-colors duration-200 ease-in-out">
+        Sign-Out
+      </button>
     </div>
+
   </div>
 </template>
 
@@ -123,7 +131,19 @@ const updateProfile = async () => {
   }
 };
 
-fetchUserData(); // Fetch user data when component is mounted
+const signOut = async () => {
+  const { error: signOutError } = await supabase.auth.signOut()
+  if (signOutError) {
+    throw new Error(`Error during sign-out: ${signOutError.message}`);
+  }
+  else{
+    alert("User has been signed out successfully")
+  }
+  router.push("/"); 
+  
+};
+
+fetchUserData(); 
 </script>
 
 <style>

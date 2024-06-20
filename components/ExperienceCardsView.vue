@@ -14,11 +14,13 @@
 const experiences = ref([]);
 const supabase = useSupabaseClient();
 
+
 onMounted(async () => {
   try {
     const { data, error } = await supabase
       .from("experiences")
-      .select("*");
+      .select("*")
+      .gte("date", today())
 
     if (error) {
       throw new Error(`Error fetching experiences: ${error.message}`);
@@ -29,5 +31,10 @@ onMounted(async () => {
     console.error(error);
   }
 });
+
+
+const today = () => {
+  return new Date().toISOString()
+};
 </script>
 
